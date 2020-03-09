@@ -1,23 +1,62 @@
 import pygame, sys, ctypes
 
-# Screen size
-user32 = ctypes.windll.user32
+class Game(object):
+    def __init__(self):
+        # Screen size
+        user32 = ctypes.windll.user32
+        self.ScreenWidth = user32.GetSystemMetrics(0)
+        self.ScreenHeight = user32.GetSystemMetrics(1)
+        screensize = (self.ScreenWidth, self.ScreenHeight)
 
-pygame.init()
-screen = pygame.display.set_mode((user32.GetSystemMetrics(0),user32.GetSystemMetrics(1)))
-box = pygame.Rect(10,10,200,500)
+        # Config
+        self.tps_max = 60.0
+        self.box = pygame.Rect(0,0,300,self.ScreenHeight)
 
-while True:
-    # Handle events
-    for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit(0)
-    # Input
-    box.x += 1
-    box.y += 1
-    box.w += 1
+        # Initialization
+        pygame.init()
+        pygame.display.set_caption('ZTGK 2020')
+        self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
+        self.tps_clock = pygame.time.Clock()
+        self.tps_delta = 0.0
 
-    # Drawing
-   #screen.fill((0,0,0))
-    pygame.draw.rect(screen, (255, 0, 0), box)
-    pygame.display.flip()
+        while True:
+            # Handle events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit(0)
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    sys.exit(0)
+
+            # Ticking
+            self.tps_delta += self.tps_clock.tick() / 1000.0
+            while self.tps_delta > 1 / self.tps_max:
+                #print("Hey")
+                self.tick()
+                self.tps_delta -= 1 / self.tps_max
+
+            # Drawing
+            # screen.fill((0,0,0))
+            self.draw()
+            pygame.display.flip()
+
+
+    def tick(self):
+        """
+            # Input
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_DOWN]:
+                buttonBoxActive.x += 10
+                buttonBoxActive.y += 10
+            elif keys[pygame.K_UP]:
+                buttonBoxActive.x -= 10
+                buttonBoxActive.y -= 10
+            """
+
+    def draw(self):
+       # self.box.x += 1
+        #self.box.y += 1
+        #self.box.w += 1
+        pygame.draw.rect(self.screen, (255, 0, 0), self.box)
+
+if __name__ == "__main__":
+    Game()
