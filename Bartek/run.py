@@ -8,6 +8,7 @@ class Game(object):
         self.ScreenHeight = user32.GetSystemMetrics(1)
         screensize = (self.ScreenWidth, self.ScreenHeight)
         self.ScreenWidth2 = int(self.ScreenWidth/10)
+        self.Screen
         print(self.ScreenWidth2)
         
         # Config
