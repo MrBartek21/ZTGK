@@ -7,18 +7,23 @@ class Game(object):
         self.ScreenWidth = user32.GetSystemMetrics(0)
         self.ScreenHeight = user32.GetSystemMetrics(1)
         screensize = (self.ScreenWidth, self.ScreenHeight)
-        self.ScreenWidth2 = self.ScreenWidth/10
-        print(self.ScreenWidth)
+        self.ScreenWidth2 = int(self.ScreenWidth/10)
+        print(self.ScreenWidth2)
         
         # Config
         self.tps_max = 60.0
-        self.box = pygame.Rect(0, 0, 300, self.ScreenHeight)
+        self.box = pygame.Rect(0, 0, self.ScreenWidth2, self.ScreenHeight)
+        self.DeveloperMode = True
 
         # Initialization
         pygame.init()
         pygame.display.set_caption('ZTGK 2020')
-        self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
-        #self.screen = pygame.display.set_mode(screensize)
+
+        if self.DeveloperMode == True:
+            self.screen = pygame.display.set_mode((500, 500))
+        else:
+            self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
+            
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.tps_clock = pygame.time.Clock()
         self.tps_delta = 0.0
