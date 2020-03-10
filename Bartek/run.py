@@ -16,7 +16,7 @@ class Game(object):
         pygame.init()
         pygame.display.set_caption('ZTGK 2020')
         self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
-        self.background_image = pygame.image.load("Graphic/background.png").convert()
+        self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.tps_clock = pygame.time.Clock()
         self.tps_delta = 0.0
 
@@ -34,6 +34,7 @@ class Game(object):
                 #print("Hey")
                 self.tick()
                 self.tps_delta -= 1 / self.tps_max
+            #print(self.tps_delta)
 
             # Drawing
             #self.screen.fill((0,0,0))
