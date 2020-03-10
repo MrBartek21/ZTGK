@@ -10,7 +10,7 @@ class Game(object):
 
         # Config
         self.tps_max = 60.0
-        self.box = pygame.Rect(0,0,300,self.ScreenHeight)
+        self.box = pygame.Rect(0, 0, 300, self.ScreenHeight)
 
         # Initialization
         pygame.init()
@@ -36,7 +36,7 @@ class Game(object):
                 self.tps_delta -= 1 / self.tps_max
 
             # Drawing
-            # screen.fill((0,0,0))
+            #self.screen.fill((0,0,0))
             self.draw()
             pygame.display.flip()
             self.screen.blit(self.background_image, [0, 0])
@@ -59,7 +59,7 @@ class Game(object):
        # self.box.x += 1
         #self.box.y += 1
         #self.box.w += 1
-        pygame.draw.rect(self.screen, (255, 0, 0), self.box)
+        pygame.draw.rect(self.screen, (127, 127, 127, 50), self.box)
 
 if __name__ == "__main__":
     Game()
