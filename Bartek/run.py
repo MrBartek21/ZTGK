@@ -1,5 +1,16 @@
-import pygame, sys, ctypes
+import ctypes
+import pygame, pygameMenu
+import sys
+import sqlite3 as lite
 
+con = lite.connect('settings.db')
+with con:
+    cur = con.cursor()
+    cur.execute('SELECT SQLITE_VERSION()')
+    data = cur.fetchone()[0]
+    print("SQLite version: {}".format(data))
+
+print(pygame.font.get_fonts())
 class Game(object):
     def __init__(self):
         # Screen size
@@ -7,9 +18,8 @@ class Game(object):
         self.ScreenWidth = user32.GetSystemMetrics(0)
         self.ScreenHeight = user32.GetSystemMetrics(1)
         screensize = (self.ScreenWidth, self.ScreenHeight)
-        self.ScreenWidth2 = int(self.ScreenWidth/10)
-        #print(self.ScreenWidth2)
-        
+        self.ScreenWidth2 = int(self.ScreenWidth / 5)
+
         # Config
         self.tps_max = 60.0
         self.box = pygame.Rect(0, 0, self.ScreenWidth2, self.ScreenHeight)
@@ -19,14 +29,18 @@ class Game(object):
         pygame.init()
         pygame.display.set_caption('ZTGK 2020')
 
-        if self.DeveloperMode == True:
+        if self.DeveloperMode:
             self.screen = pygame.display.set_mode((1200, 800))
         else:
-            self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN, 0, 32)
 
         self.x = self.screen.get_width()
         self.y = self.screen.get_height()
-        
+
+        # Fonts
+        self.font = pygame.font.Font('Framework/Fonts/comic-sans-ms.ttf', 32)
+
+        # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
         self.tps_clock = pygame.time.Clock()
@@ -43,18 +57,14 @@ class Game(object):
             # Ticking
             self.tps_delta += self.tps_clock.tick() / 1000.0
             while self.tps_delta > 1 / self.tps_max:
-                #print("Hey")
                 self.tick()
                 self.tps_delta -= 1 / self.tps_max
-            #print(self.tps_delta)
+            # print(self.tps_delta)
 
             # Drawing
-            #self.screen.fill((0,0,0))
+            # self.screen.fill((0,0,0))
             self.draw()
             pygame.display.flip()
-            self.screen.blit(self.background_image, [0, 0])
-
-
 
     def tick(self):
         """
@@ -69,10 +79,16 @@ class Game(object):
             """
 
     def draw(self):
-       # self.box.x += 1
-        #self.box.y += 1
-        #self.box.w += 1
-        pygame.draw.rect(self.screen, (127, 127, 127, 50), self.box)
+        self.screen.blit(self.background_image, [0, 0])
+        pygame.draw.rect(self.screen, (127, 127, 127), self.box)
+        self.draw_text("ZTGK 2020", (0, 255, 0), 15, 10)
+
+    def draw_text(self, text, color, x, y):
+        textobj = self.font.render(text, True, color)
+        textRect = textobj.get_rect()
+        textRect.topleft = (x, y)
+        self.screen.blit(textobj, textRect)
+
 
 if __name__ == "__main__":
     Game()

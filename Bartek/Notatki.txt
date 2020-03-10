@@ -1,0 +1,51 @@
+# -------------------------------------------------------------------------
+        # Create menus
+        # -------------------------------------------------------------------------
+
+
+        # Play menu
+        play_menu = pygameMenu.Menu(self.screen,
+                                    bgfun=self.main_background,
+                                    color_selected=(255, 255, 255),
+                                    font=pygameMenu.font.FONT_BEBAS,
+                                    font_color=(0, 0, 0),
+                                    font_size=30,
+                                    menu_alpha=100,
+                                    menu_color=(228, 55, 36),
+                                    menu_height=int(self.ScreenHeight * 0.7),
+                                    menu_width=int(self.ScreenWidth * 0.7),
+                                    onclose=pygameMenu.events.DISABLE_CLOSE,
+                                    option_shadow=False,
+                                    title='Play menu',
+                                    window_height=self.ScreenHeight,
+                                    window_width=self.ScreenWidth
+                                    )
+        # Main menu
+        main_menu = pygameMenu.Menu(self.screen,
+                                    bgfun=self.main_background,
+                                    color_selected=(255, 255, 255),
+                                    font=pygameMenu.font.FONT_BEBAS,
+                                    font_color=(0, 0, 0),
+                                    font_size=30,
+                                    menu_alpha=100,
+                                    menu_color=(228, 55, 36),
+                                    menu_height=int(self.ScreenHeight * 0.6),
+                                    menu_width=int(self.ScreenWidth * 0.6),
+                                    onclose=pygameMenu.events.DISABLE_CLOSE,
+                                    option_shadow=False,
+                                    title='Main menu',
+                                    window_height=self.ScreenHeight,
+                                    window_width=self.ScreenWidth
+                                    )
+
+        main_menu.add_option('Play', play_menu)
+        main_menu.add_option('Quit', pygameMenu.events.EXIT)
+
+
+
+
+
+
+
+    def main_background(self):
+        self.screen.fill((128, 0, 128))
