@@ -8,7 +8,6 @@ class Game(object):
         self.ScreenHeight = user32.GetSystemMetrics(1)
         screensize = (self.ScreenWidth, self.ScreenHeight)
         self.ScreenWidth2 = int(self.ScreenWidth/10)
-        self.Screen
         print(self.ScreenWidth2)
         
         # Config
@@ -24,8 +23,12 @@ class Game(object):
             self.screen = pygame.display.set_mode((500, 500))
         else:
             self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
-            
+
+        self.x = self.screen.get_width()
+        self.y = self.screen.get_height()
+        
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
+        self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
         self.tps_clock = pygame.time.Clock()
         self.tps_delta = 0.0
 
