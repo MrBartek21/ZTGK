@@ -8,7 +8,7 @@ class Game(object):
         self.ScreenHeight = user32.GetSystemMetrics(1)
         screensize = (self.ScreenWidth, self.ScreenHeight)
         self.ScreenWidth2 = int(self.ScreenWidth/10)
-        print(self.ScreenWidth2)
+        #print(self.ScreenWidth2)
         
         # Config
         self.tps_max = 60.0
@@ -20,7 +20,7 @@ class Game(object):
         pygame.display.set_caption('ZTGK 2020')
 
         if self.DeveloperMode == True:
-            self.screen = pygame.display.set_mode((500, 500))
+            self.screen = pygame.display.set_mode((1200, 800))
         else:
             self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
 
