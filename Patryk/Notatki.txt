@@ -1,0 +1,14 @@
+Nie tykać bo wybuchnie 
+
+Player:
+-sterowanie 
+-grawitacja
+
+Map:
+-każdy level odzielna klasa
+-stworzyć bota który zrobi bit mape
+-obrazki - fragmenty mapy , przeszkody
+
+Run:
+- na potrzeby testów
+- Grozi śmiercią 
