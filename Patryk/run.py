@@ -19,7 +19,6 @@ class Game(object):
         pygame.init()
         pygame.display.set_caption('ZTGK 2020')
         self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN)
-        self.screen = pygame.display.set_mode(screensize)
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.tps_clock = pygame.time.Clock()
         self.tps_delta = 0.0
