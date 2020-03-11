@@ -30,10 +30,11 @@ class Game(object):
         self.tps_max = 60.0
         self.box = pygame.Rect(0, 0, self.ScreenWidth2, self.ScreenHeight)
         self.DeveloperMode = True
+        self.Title = "Bill's Adventrure"
 
         # Initialization
         pygame.init()
-        pygame.display.set_caption('ZTGK 2020')
+        pygame.display.set_caption(self.Title)
 
         if self.DeveloperMode:
             self.screen = pygame.display.set_mode((1200, 800))
@@ -44,7 +45,8 @@ class Game(object):
         self.y = self.screen.get_height()
 
         # Fonts
-        self.font = pygame.font.Font('Framework/Fonts/comic-sans-ms.ttf', 32)
+        # self.font = pygame.font.Font('Framework/Fonts/comic-sans-ms.ttf', 32)
+        self.font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', 32)
 
         # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
@@ -88,7 +90,7 @@ class Game(object):
     def draw(self):
         self.screen.blit(self.background_image, [0, 0])
         pygame.draw.rect(self.screen, (127, 127, 127), self.box)
-        self.draw_text("ZTGK 2020", (0, 255, 0), 15, 10)
+        self.draw_text(self.Title, (127, 27, 27), 15, 10)
 
     def draw_text(self, text, color, x, y):
         textobj = self.font.render(text, True, color)
