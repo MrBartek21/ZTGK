@@ -1,5 +1,5 @@
 import ctypes
-import pygame, pygameMenu
+import pygame
 import sys
 import sqlite3 as lite
 
