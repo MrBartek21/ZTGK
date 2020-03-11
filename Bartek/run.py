@@ -3,14 +3,19 @@ import pygame
 import sys
 import sqlite3 as lite
 
-con = lite.connect('settings.db')
+con = lite.connect('database.db')
 with con:
     cur = con.cursor()
-    cur.execute('SELECT SQLITE_VERSION()')
-    data = cur.fetchone()[0]
-    print("SQLite version: {}".format(data))
+    cur.execute("CREATE TABLE IF NOT EXISTS save( id integer PRIMARY KEY, nick text NOT NULL, coin integer, world integer, lvl integer, eq integer);")
+    #cur.execute("SHOW TABLES;")
+    
+    #data = cur.fetchone()[0]
+    #print("SQLite version: {}".format(data))
 
-print(pygame.font.get_fonts())
+"""
+    Nick coin World Lvl Eq 
+"""
+
 class Game(object):
     def __init__(self):
         # Screen size
@@ -51,8 +56,9 @@ class Game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit(0)
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    sys.exit(0)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        sys.exit(0)
 
             # Ticking
             self.tps_delta += self.tps_clock.tick() / 1000.0
