@@ -11,6 +11,7 @@ with con:
     
     #data = cur.fetchone()[0]
     #print("SQLite version: {}".format(data))
+    #fsdfsd
 
 """
     Nick coin World Lvl Eq 
