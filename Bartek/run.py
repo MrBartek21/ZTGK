@@ -91,7 +91,7 @@ class Game(object):
         self.screen.blit(self.background_image, [0, 0])
         # pygame.draw.rect(self.screen, (127, 127, 127), self.box)
         # Rysowanie napisu
-        self.draw_text(self.Title, (127, 27, 27), int(self.x/2), 100, 80, 0)
+        self.draw_text(self.Title, (127, 27, 27), int(self.x/2), 100, 96, 0)
 
         # Start Button
         if int(self.x/2-150) + 300 > self.mouse[0] > int(self.x/2-150) and 250 + 75 > self.mouse[1] > 250:
@@ -99,7 +99,10 @@ class Game(object):
         else:
             pygame.draw.rect(self.screen, (0, 200, 0), (int(self.x/2-150), 250, 300, 75))
 
-        self.draw_text("New game", (127, 27, 27), 0, 0, 24, 1)
+        pygame.draw.rect(self.screen, (0, 200, 0), (int(self.x / 2 - 150), 350, 300, 75))
+        self.draw_text("New game", (127, 27, 27), 0, 250, 36, 1)
+        self.draw_text("Settings", (127, 27, 27), 0, 350, 36, 1)
+        self.draw_text("Exit", (127, 27, 27), 0, 450, 36, 1)
 
 
 
@@ -113,7 +116,7 @@ class Game(object):
         textRect = textobj.get_rect()
 
         if dev == 1:
-            textRect.center = ((int(self.x/2-150) + (300 / 2)), (250 + (75 / 2)))
+            textRect.center = (int(int(self.x/2-150) + (300 / 2)), int(y + (75 / 2)))
         else:
             textRect.center = (x, y)
         self.screen.blit(textobj, textRect)
