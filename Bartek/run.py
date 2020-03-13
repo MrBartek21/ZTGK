@@ -89,26 +89,33 @@ class Game(object):
 
     def draw(self):
         self.screen.blit(self.background_image, [0, 0])
-        #pygame.draw.rect(self.screen, (127, 127, 127), self.box)
+        # pygame.draw.rect(self.screen, (127, 127, 127), self.box)
         # Rysowanie napisu
-        self.draw_text(self.Title, (127, 27, 27), int(self.x/2), 100, 80)
+        self.draw_text(self.Title, (127, 27, 27), int(self.x/2), 100, 80, 0)
 
-
-
-        if 150 + 100 > self.mouse[0] > 150 and 450 + 50 > self.mouse[1] > 450:
-            pygame.draw.rect(self.screen, (0, 255, 255), (150, 450, 100, 50))
+        # Start Button
+        if int(self.x/2-150) + 300 > self.mouse[0] > 300 and 250 + 75 > self.mouse[1] > 250:
+            pygame.draw.rect(self.screen, (0, 255, 0), (int(self.x/2-150), 250, 300, 75))
         else:
-            pygame.draw.rect(self.screen, (0, 255, 0), (150, 450, 100, 50))
-        pygame.draw.rect(self.screen, (255, 0, 0), (550, 450, 100, 50))
+            pygame.draw.rect(self.screen, (0, 200, 0), (int(self.x/2-150), 250, 300, 75))
 
-    def draw_text(self, text, color, x, y, size):
+        self.draw_text("Go", (127, 27, 27), 0, 0, 20, 1)
+
+
+
+
+    def draw_text(self, text, color, x, y, size, dev):
         # Fonts
         # self.font = pygame.font.Font('Framework/Fonts/comic-sans-ms.ttf', 32)
         self.font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', size)
 
         textobj = self.font.render(text, True, color)
         textRect = textobj.get_rect()
-        textRect.center = (x, y)
+
+        if dev == 1:
+            textRect.center = ((150 + (100 / 2)), (450 + (50 / 2)))
+        else:
+            textRect.center = (x, y)
         self.screen.blit(textobj, textRect)
 
 
