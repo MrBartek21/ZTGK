@@ -66,15 +66,14 @@ class Game(object):
             while self.tps_delta > 1 / self.tps_max:
                 self.tick()
                 self.tps_delta -= 1 / self.tps_max
-            # print(self.tps_delta)
+            # print(self.tps_clock.tick())
 
             # Drawing
             # self.screen.fill((0,0,0))
-            self.mouse = pygame.mouse.get_pos()
-            # print(mouse)
             self.draw()
             pygame.display.flip()
 
+    # Tick function
     def tick(self):
         """
             # Input
@@ -87,39 +86,50 @@ class Game(object):
                 buttonBoxActive.y -= 10
             """
 
+    # Main draw function
     def draw(self):
         self.screen.blit(self.background_image, [0, 0])
-        # pygame.draw.rect(self.screen, (127, 127, 127), self.box)
-        # Rysowanie napisu
-        self.draw_text(self.Title, (127, 27, 27), int(self.x/2), 100, 96, 0)
+        # Draw text title
+        self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96, 0)
+        self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), 0, 250, 300, 75, self.new_game)
+        self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), 0, 350, 300, 75, self.settings)
+        self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), 0, 450, 300, 75, self.quit_game)
 
-        # Start Button
-        if int(self.x/2-150) + 300 > self.mouse[0] > int(self.x/2-150) and 250 + 75 > self.mouse[1] > 250:
-            pygame.draw.rect(self.screen, (0, 255, 0), (int(self.x/2-150), 250, 300, 75))
+    # Draw buttons function
+    def draw_buttons(self, text, icolor, acolor, x, y, width, height, action=None):
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        # print(click)
+        if int(self.x / 2 - 150) + width > mouse[0] > int(self.x / 2 - 150) and y + 75 > mouse[1] > y:
+            pygame.draw.rect(self.screen, icolor, (int(self.x / 2 - 150), y, width, height))
+            if click[0] == 1 and action != None:
+                action()
         else:
-            pygame.draw.rect(self.screen, (0, 200, 0), (int(self.x/2-150), 250, 300, 75))
+            pygame.draw.rect(self.screen, acolor, (int(self.x / 2 - 150), y, width, height))
+        self.draw_text(text, (127, 27, 27), 0, y, 36, 1)
 
-        pygame.draw.rect(self.screen, (0, 200, 0), (int(self.x / 2 - 150), 350, 300, 75))
-        self.draw_text("New game", (127, 27, 27), 0, 250, 36, 1)
-        self.draw_text("Settings", (127, 27, 27), 0, 350, 36, 1)
-        self.draw_text("Exit", (127, 27, 27), 0, 450, 36, 1)
-
-
-
-
+    # Drawn text functions
     def draw_text(self, text, color, x, y, size, dev):
         # Fonts
-        # self.font = pygame.font.Font('Framework/Fonts/comic-sans-ms.ttf', 32)
-        self.font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', size)
-
-        textobj = self.font.render(text, True, color)
-        textRect = textobj.get_rect()
+        font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', size)
+        textobj = font.render(text, True, color)
+        textrect = textobj.get_rect()
 
         if dev == 1:
-            textRect.center = (int(int(self.x/2-150) + (300 / 2)), int(y + (75 / 2)))
+            textrect.center = (int(int(self.x / 2 - 150) + (300 / 2)), int(y + (75 / 2)))
         else:
-            textRect.center = (x, y)
-        self.screen.blit(textobj, textRect)
+            textrect.center = (x, y)
+        self.screen.blit(textobj, textrect)
+
+    def new_game(self):
+        pass
+
+    def settings(self):
+        pass
+
+    # Exit game function
+    def quit_game(self):
+        sys.exit(0)
 
 
 if __name__ == "__main__":
