@@ -46,6 +46,15 @@ class Game(object):
         self.x = self.screen.get_width()
         self.y = self.screen.get_height()
 
+        # Main Menu Music
+        pygame.mixer.music.load('Framework/Music/Cinematic.mp3')
+        pygame.mixer.music.play(-1)
+
+
+        # Icon Image
+        gameIcon = pygame.image.load('Framework/Graphic/Icon.png')
+        pygame.display.set_icon(gameIcon)
+
         # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
