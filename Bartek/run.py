@@ -94,12 +94,12 @@ class Game(object):
         self.draw_text(self.Title, (127, 27, 27), int(self.x/2), 100, 80, 0)
 
         # Start Button
-        if int(self.x/2-150) + 300 > self.mouse[0] > 300 and 250 + 75 > self.mouse[1] > 250:
+        if int(self.x/2-150) + 300 > self.mouse[0] > int(self.x/2-150) and 250 + 75 > self.mouse[1] > 250:
             pygame.draw.rect(self.screen, (0, 255, 0), (int(self.x/2-150), 250, 300, 75))
         else:
             pygame.draw.rect(self.screen, (0, 200, 0), (int(self.x/2-150), 250, 300, 75))
 
-        self.draw_text("Go", (127, 27, 27), 0, 0, 20, 1)
+        self.draw_text("New game", (127, 27, 27), 0, 0, 24, 1)
 
 
 
@@ -113,7 +113,7 @@ class Game(object):
         textRect = textobj.get_rect()
 
         if dev == 1:
-            textRect.center = ((150 + (100 / 2)), (450 + (50 / 2)))
+            textRect.center = ((int(self.x/2-150) + (300 / 2)), (250 + (75 / 2)))
         else:
             textRect.center = (x, y)
         self.screen.blit(textobj, textRect)
