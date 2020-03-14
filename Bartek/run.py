@@ -79,7 +79,7 @@ class Game(object):
 
             # Drawing
             # self.screen.fill((0,0,0))
-            print(self.choice)
+            #print(self.choice)
             self.draw()
             pygame.display.flip()
 
@@ -101,19 +101,19 @@ class Game(object):
         if self.choice < 5:
             self.screen.blit(self.background_image, [0, 0])
             # Draw text title
-            self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96, 0)
+            self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
 
             # Choice Menu
             if self.choice == 0:
-                self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), self.x, 250, 300, 75, self.new_game, 0)
-                self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), self.x, 350, 300, 75, self.settings, 0)
-                self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), self.x, 450, 300, 75, self.quit_game, 0)
+                self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), self.x, 250, 300, 75, self.new_game)
+                self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), self.x, 350, 300, 75, self.settings)
+                self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), self.x, 450, 300, 75, self.quit_game)
             elif self.choice == 2:
-                self.draw_buttons("Music", (0, 250, 0), (27, 27, 27), 650, 300, 300, 75, self.back, 1)
-                self.draw_buttons("Back", (0, 250, 0), (27, 27, 27), self.x, 650, 300, 75, self.back, 0)
+                self.draw_buttons("Music", (0, 250, 0), (27, 27, 27), 650, 300, 300, 75, self.back)
+                self.draw_buttons("Back", (0, 250, 0), (27, 27, 27), self.x, 650, 300, 75, self.back)
 
     # Draw buttons function
-    def draw_buttons(self, text, idle_color, action_color, x, y, width, height, action=None, choice=0):
+    def draw_buttons(self, text, idle_color, action_color, x, y, width, height, action=None):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         # print(click)
@@ -123,24 +123,15 @@ class Game(object):
                 action()
         else:
             pygame.draw.rect(self.screen, action_color, (int(x / 2 - 150), y, width, height))
-
-        # Other buttons
-        if choice == 1:
-            self.draw_text(text, (127, 27, 27), int(x / 2), int(y + int(height / 2)), 36, 0)
-        else:
-            self.draw_text(text, (127, 27, 27), 0, y, 36, 1)
+        self.draw_text(text, (127, 27, 27), int(x / 2), int(y + int(height / 2)), 36)
 
     # Drawn text functions
-    def draw_text(self, text, color, x, y, size, choice):
+    def draw_text(self, text, color, x, y, size):
         # Fonts
         font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', size)
         textobj = font.render(text, True, color)
         textrect = textobj.get_rect()
-
-        if choice == 1:
-            textrect.center = (int(int(self.x / 2 - 150) + (300 / 2)), int(y + (75 / 2)))
-        else:
-            textrect.center = (x, y)
+        textrect.center = (x, y)
         self.screen.blit(textobj, textrect)
 
     def new_game(self):
