@@ -55,6 +55,10 @@ class Game(object):
         gameIcon = pygame.image.load('Framework/Graphic/Icon.png')
         pygame.display.set_icon(gameIcon)
 
+        # Buttons Image
+        self.btn_image = pygame.image.load("Framework/Graphic/tabliczka_2.png").convert_alpha()
+        self.btn_image2 = pygame.image.load("Framework/Graphic/tabliczka_3.png").convert_alpha()
+
         # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
@@ -105,25 +109,30 @@ class Game(object):
 
             # Choice Menu
             if self.choice == 0:
-                self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), self.x, 250, 300, 75, self.new_game)
-                self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), self.x, 350, 300, 75, self.settings)
-                self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), self.x, 450, 300, 75, self.quit_game)
+                self.draw_buttons("New game", (127, 27, 27), 36, self.x, 250, 300, 64, self.new_game)
+                self.draw_buttons("Settings", (127, 27, 27), 36, self.x, 325, 300, 64, self.settings)
+                self.draw_buttons("Exit", (127, 27, 27), 36, self.x, 400, 300, 64, self.quit_game)
             elif self.choice == 2:
-                self.draw_buttons("Music", (0, 250, 0), (27, 27, 27), 650, 300, 300, 75, self.back)
-                self.draw_buttons("Back", (0, 250, 0), (27, 27, 27), self.x, 650, 300, 75, self.back)
+                self.draw_buttons("Music", (127, 27, 27), 36, 650, 300, 300, 64, self.back)
+                self.draw_buttons("Back", (127, 27, 27), 36, self.x, 650, 300, 64, self.back)
 
     # Draw buttons function
-    def draw_buttons(self, text, idle_color, action_color, x, y, width, height, action=None):
+    def draw_buttons(self, text, text_color, size, x, y, width, height, action=None):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        # print(click)
-        if int(x / 2 - 150) + width > mouse[0] > int(x / 2 - 150) and y + height > mouse[1] > y:
-            pygame.draw.rect(self.screen, idle_color, (int(x / 2 - 150), y, width, height))
+
+        self.btn_image = pygame.transform.scale(self.btn_image, (width, height))
+        self.btn_image2 = pygame.transform.scale(self.btn_image2, (width, height))
+
+        if int(x / 2 - int(width / 2)) + width > mouse[0] > int(x / 2 - int(width / 2)) and y + height > mouse[1] > y:
+            self.screen.blit(self.btn_image2, [int(x / 2 - int(width / 2)), y])
+            self.draw_text(text, text_color, int(x / 2), int(y + int(height / 2)), size)
             if click[0] == 1 and action != None:
                 action()
         else:
-            pygame.draw.rect(self.screen, action_color, (int(x / 2 - 150), y, width, height))
-        self.draw_text(text, (127, 27, 27), int(x / 2), int(y + int(height / 2)), 36)
+
+            self.screen.blit(self.btn_image, [int(x / 2 - int(width / 2)), y])
+            self.draw_text(text, text_color, int(x / 2), int(y + int(height / 2)), size)
 
     # Drawn text functions
     def draw_text(self, text, color, x, y, size):
