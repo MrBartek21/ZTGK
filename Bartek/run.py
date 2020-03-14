@@ -47,7 +47,7 @@ class Game(object):
         self.y = self.screen.get_height()
 
         # Main Menu Music
-        pygame.mixer.music.load('Framework/Music/Cinematic.mp3')
+        pygame.mixer.music.load('Framework/Music/Cinematic2.mp3')
         pygame.mixer.music.play(-1)
 
 
