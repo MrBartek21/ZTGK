@@ -30,6 +30,7 @@ class Game(object):
 
         # Config
         self.tps_max = 60.0
+        self.choice = 0
         self.box = pygame.Rect(0, 0, self.ScreenWidth2, self.ScreenHeight)
         self.DeveloperMode = True
         self.Title = "Bill's Adventrure"
@@ -47,9 +48,8 @@ class Game(object):
         self.y = self.screen.get_height()
 
         # Main Menu Music
-        pygame.mixer.music.load('Framework/Music/Cinematic2.mp3')
-        pygame.mixer.music.play(-1)
-
+        pygame.mixer.music.load('Framework/Music/Cinematic.mp3')
+        # pygame.mixer.music.play(-1)
 
         # Icon Image
         gameIcon = pygame.image.load('Framework/Graphic/Icon.png')
@@ -79,6 +79,7 @@ class Game(object):
 
             # Drawing
             # self.screen.fill((0,0,0))
+            print(self.choice)
             self.draw()
             pygame.display.flip()
 
@@ -97,24 +98,30 @@ class Game(object):
 
     # Main draw function
     def draw(self):
-        self.screen.blit(self.background_image, [0, 0])
-        # Draw text title
-        self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96, 0)
-        self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), 0, 250, 300, 75, self.new_game)
-        self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), 0, 350, 300, 75, self.settings)
-        self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), 0, 450, 300, 75, self.quit_game)
+        if self.choice < 5:
+            self.screen.blit(self.background_image, [0, 0])
+            # Draw text title
+            self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96, 0)
+
+            # Choice Menu
+            if self.choice == 0:
+                self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), 0, 250, 300, 75, self.new_game)
+                self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), 0, 350, 300, 75, self.settings)
+                self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), 0, 450, 300, 75, self.quit_game)
+            elif self.choice == 2:
+                self.draw_buttons("Back", (0, 250, 0), (27, 27, 27), 0, 650, 300, 75, self.back)
 
     # Draw buttons function
-    def draw_buttons(self, text, icolor, acolor, x, y, width, height, action=None):
+    def draw_buttons(self, text, idle_color, action_color, x, y, width, height, action=None):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         # print(click)
         if int(self.x / 2 - 150) + width > mouse[0] > int(self.x / 2 - 150) and y + 75 > mouse[1] > y:
-            pygame.draw.rect(self.screen, icolor, (int(self.x / 2 - 150), y, width, height))
+            pygame.draw.rect(self.screen, idle_color, (int(self.x / 2 - 150), y, width, height))
             if click[0] == 1 and action != None:
                 action()
         else:
-            pygame.draw.rect(self.screen, acolor, (int(self.x / 2 - 150), y, width, height))
+            pygame.draw.rect(self.screen, action_color, (int(self.x / 2 - 150), y, width, height))
         self.draw_text(text, (127, 27, 27), 0, y, 36, 1)
 
     # Drawn text functions
@@ -131,14 +138,18 @@ class Game(object):
         self.screen.blit(textobj, textrect)
 
     def new_game(self):
-        pass
+        self.choice = 1
 
     def settings(self):
-        pass
+        self.choice = 2
 
     # Exit game function
     def quit_game(self):
         sys.exit(0)
+
+    # Back function
+    def back(self):
+        self.choice = 0
 
 
 if __name__ == "__main__":
