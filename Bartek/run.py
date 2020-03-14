@@ -62,6 +62,8 @@ class Game(object):
         # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
+        self.bg_l1_image = pygame.image.load("Framework/Graphic/plansza_1.png").convert()
+        self.bg_l1_image = pygame.transform.scale(self.bg_l1_image, (self.x, self.y))
         self.tps_clock = pygame.time.Clock()
         self.tps_delta = 0.0
 
@@ -112,9 +114,11 @@ class Game(object):
                 self.draw_buttons("New game", (127, 27, 27), 36, self.x, 250, 300, 64, self.new_game)
                 self.draw_buttons("Settings", (127, 27, 27), 36, self.x, 325, 300, 64, self.settings)
                 self.draw_buttons("Exit", (127, 27, 27), 36, self.x, 400, 300, 64, self.quit_game)
-            elif self.choice == 2:
+            elif self.choice == 1:
                 self.draw_buttons("Music", (127, 27, 27), 36, 650, 300, 300, 64, self.back)
-                self.draw_buttons("Back", (127, 27, 27), 36, self.x, 650, 300, 64, self.back)
+                self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, self.back)
+        else:
+            self.screen.blit(self.bg_l1_image, [0, 0])
 
     # Draw buttons function
     def draw_buttons(self, text, text_color, size, x, y, width, height, action=None):
@@ -144,10 +148,10 @@ class Game(object):
         self.screen.blit(textobj, textrect)
 
     def new_game(self):
-        self.choice = 1
+        self.choice = 6
 
     def settings(self):
-        self.choice = 2
+        self.choice = 1
 
     # Exit game function
     def quit_game(self):
