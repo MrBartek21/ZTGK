@@ -105,33 +105,39 @@ class Game(object):
 
             # Choice Menu
             if self.choice == 0:
-                self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), 0, 250, 300, 75, self.new_game)
-                self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), 0, 350, 300, 75, self.settings)
-                self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), 0, 450, 300, 75, self.quit_game)
+                self.draw_buttons("New game", (0, 250, 0), (27, 27, 27), self.x, 250, 300, 75, self.new_game, 0)
+                self.draw_buttons("Settings", (0, 250, 0), (27, 27, 27), self.x, 350, 300, 75, self.settings, 0)
+                self.draw_buttons("Exit", (0, 250, 0), (27, 27, 27), self.x, 450, 300, 75, self.quit_game, 0)
             elif self.choice == 2:
-                self.draw_buttons("Back", (0, 250, 0), (27, 27, 27), 0, 650, 300, 75, self.back)
+                self.draw_buttons("Music", (0, 250, 0), (27, 27, 27), 650, 300, 300, 75, self.back, 1)
+                self.draw_buttons("Back", (0, 250, 0), (27, 27, 27), self.x, 650, 300, 75, self.back, 0)
 
     # Draw buttons function
-    def draw_buttons(self, text, idle_color, action_color, x, y, width, height, action=None):
+    def draw_buttons(self, text, idle_color, action_color, x, y, width, height, action=None, choice=0):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         # print(click)
-        if int(self.x / 2 - 150) + width > mouse[0] > int(self.x / 2 - 150) and y + 75 > mouse[1] > y:
-            pygame.draw.rect(self.screen, idle_color, (int(self.x / 2 - 150), y, width, height))
+        if int(x / 2 - 150) + width > mouse[0] > int(x / 2 - 150) and y + height > mouse[1] > y:
+            pygame.draw.rect(self.screen, idle_color, (int(x / 2 - 150), y, width, height))
             if click[0] == 1 and action != None:
                 action()
         else:
-            pygame.draw.rect(self.screen, action_color, (int(self.x / 2 - 150), y, width, height))
-        self.draw_text(text, (127, 27, 27), 0, y, 36, 1)
+            pygame.draw.rect(self.screen, action_color, (int(x / 2 - 150), y, width, height))
+
+        # Other buttons
+        if choice == 1:
+            self.draw_text(text, (127, 27, 27), int(x / 2), int(y + int(height / 2)), 36, 0)
+        else:
+            self.draw_text(text, (127, 27, 27), 0, y, 36, 1)
 
     # Drawn text functions
-    def draw_text(self, text, color, x, y, size, dev):
+    def draw_text(self, text, color, x, y, size, choice):
         # Fonts
         font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', size)
         textobj = font.render(text, True, color)
         textrect = textobj.get_rect()
 
-        if dev == 1:
+        if choice == 1:
             textrect.center = (int(int(self.x / 2 - 150) + (300 / 2)), int(y + (75 / 2)))
         else:
             textrect.center = (x, y)
