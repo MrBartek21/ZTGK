@@ -104,7 +104,6 @@ class Game(object):
 
     # Main draw function
     def draw(self):
-        self.draw_text("Preview version. Build ", (127, 27, 27), (self.x + 100) - self.x, 300, 36)
         # Choice Menu
         if self.choice == 'menu':
             self.main_menu()
@@ -122,6 +121,9 @@ class Game(object):
             sys.exit(0)
         elif self.choice == 'back':
             self.choice = 'menu'
+
+        self.draw_text("Preview version. Build 2e83c51", (27, 27, 27), (self.x + 100) - self.x, (self.y+10)-self.y,
+                       16)
 
     # Draw buttons function
     def draw_buttons(self, text, text_color, size, x, y, width, height, choice=None):
