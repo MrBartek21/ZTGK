@@ -1,66 +1,89 @@
 import ctypes
-import pygame, pygameMenu
+import pygame
 import sys
 import json
-import sqlite3 as lite
 
 
-def load_db(db, choice='con', volume=1.0):
-    con = lite.connect(db)
-    with con:
-        cur = con.cursor()
+# Check config file before init
+def check_json(file_js):
+    try:
+        with open(file_js) as f:
+            print(f.readlines())
+            # Do something with the file
+    except IOError:
+        print("File not accessible")
+        f = open(file_js, "a")
 
-        if choice == 'init':
-            cur.execute("CREATE TABLE IF NOT EXISTS save(id integer PRIMARY KEY, nick text NOT NULL, coin integer, "
-                        "world integer, lvl integer, eq integer);")
-            cur.execute("CREATE TABLE IF NOT EXISTS settings(id integer PRIMARY KEY, music float);")
-            cur.execute("SELECT COUNT(*) FROM settings")
+        # Screen size
+        user32 = ctypes.windll.user32
+        ScreenWidth = user32.GetSystemMetrics(0)
+        ScreenHeight = user32.GetSystemMetrics(1)
 
-            data = cur.fetchone()[0]
-            if data == 0:
-                cur.execute("INSERT INTO settings VALUES(1, " + str(volume) + ")")
-        elif choice == 'vol':
-            cur.execute("SELECT music FROM settings")
-            data = cur.fetchone()[0]
-            return data
-        elif choice == 'setvol':
-            cur.execute("UPDATE settings SET music = " + str(volume) + " WHERE id = 1")
+        x = {
+            "settings": {
+                "volume": 1,
+                "music": 1,
+                "tps": 60
+            },
+            "screen": {
+                "width": ScreenWidth,
+                "height": ScreenHeight,
+                "fullscreen": 1
+            }
+        }
+        f.write(json.dumps(x))
+        f.close()
 
 
-def load_json():
-    with open('config.txt', 'r') as file:
+# load json file
+def load_json(file_js):
+    with open(file_js, 'r') as file:
         data = file.read().replace('\n', '')
         data = json.loads(data)
     return data
 
 
-x = load_json()
-print(x['menu2'])
+# Update json file
+def update_json(json_object, file_js):
+    a_file = open(file_js, "w")
+    json.dump(json_object, a_file)
+    a_file.close()
 
 
 class Game(object):
     def __init__(self):
-        # Screen size
-        user32 = ctypes.windll.user32
-        self.ScreenWidth = user32.GetSystemMetrics(0)
-        self.ScreenHeight = user32.GetSystemMetrics(1)
-        screensize = (self.ScreenWidth, self.ScreenHeight)
-        self.ScreenWidth2 = int(self.ScreenWidth / 5)
+        # ----------------------------------------------------------------------------------------
+        # ----------------------------------------[CONFIG]----------------------------------------
+        # ----------------------------------------------------------------------------------------
 
         # Config
-        self.tps_max = 60.0
         self.choice = 'menu'
-        self.box = pygame.Rect(0, 0, self.ScreenWidth2, self.ScreenHeight)
         self.DeveloperMode = True
         self.Title = "Bill's Adventrure"
-        self.db = 'database.db'
+        self.config_file = 'config.txt'
+        tps_clock = pygame.time.Clock()
+        tps_delta = 0.0
+
+        # Check settings
+        check_json(self.config_file)
+        self.json_data = load_json(self.config_file)
+
+        # Settings
+        settings_json = self.json_data['settings']
+        tps_max = settings_json['tps']
+        volume_m = settings_json['music']
+
+        # Screen size
+        screen_json = self.json_data['screen']
+        screensize = (screen_json['width'], screen_json['height'])
+
+        # ----------------------------------------------------------------------------------------
+        # ----------------------------------------------------------------------------------------
+        # ----------------------------------------------------------------------------------------
 
         # Initialization
         pygame.init()
         pygame.display.set_caption(self.Title)
-        load_db(self.db, 'init')
-        self.volume = load_db(self.db, 'vol')
-        print(self.volume)
 
         if self.DeveloperMode:
             self.screen = pygame.display.set_mode((1200, 800))
@@ -73,7 +96,7 @@ class Game(object):
         # Main Menu Music
         pygame.mixer.music.load('Framework/Music/Cinematic.mp3')
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(self.volume)
+        pygame.mixer.music.set_volume(volume_m)
 
         # Icon Image
         gameIcon = pygame.image.load('Framework/Graphic/Icon.png')
@@ -88,8 +111,6 @@ class Game(object):
         self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
         self.bg_l1_image = pygame.image.load("Framework/Graphic/plansza_1.png").convert()
         self.bg_l1_image = pygame.transform.scale(self.bg_l1_image, (self.x, self.y))
-        self.tps_clock = pygame.time.Clock()
-        self.tps_delta = 0.0
 
         while True:
             # Handle events
@@ -101,15 +122,12 @@ class Game(object):
                         sys.exit(0)
 
             # Ticking
-            self.tps_delta += self.tps_clock.tick() / 1000.0
-            while self.tps_delta > 1 / self.tps_max:
+            tps_delta += tps_clock.tick() / 1000.0
+            while tps_delta > 1 / tps_max:
                 self.tick()
-                self.tps_delta -= 1 / self.tps_max
-            # print(self.tps_clock.tick())
+                tps_delta -= 1 / tps_max
 
             # Drawing
-            # self.screen.fill((0,0,0))
-            # print(self.choice)
             self.draw()
             pygame.display.flip()
 
@@ -150,10 +168,11 @@ class Game(object):
             self.choice = 'menu'
         elif self.choice == 'volume':
             self.choice = 'settings'
-            self.volume = result[1]
-            self.volume = int(self.volume) / 100.0
-            pygame.mixer.music.set_volume(self.volume)
-            self.volume = load_db(self.db, 'setvol', self.volume)
+            volume_m = result[1]
+            volume_m = int(volume_m) / 100.0
+            pygame.mixer.music.set_volume(volume_m)
+            self.json_data['settings']['music'] = volume_m
+            update_json(self.json_data, self.config_file)
 
         self.draw_text("Preview version. Build 2e83c51", (27, 27, 27), (self.x + 100) - self.x, (self.y + 10) - self.y,
                        16)
