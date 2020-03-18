@@ -86,6 +86,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="server (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Bartek" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Bartek" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -109,6 +130,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.server (1)" />
         <item itemvalue="Python.server" />
         <item itemvalue="Python.client" />
         <item itemvalue="Python.Tutorial #8" />
@@ -141,22 +163,22 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="740" y="295" key="FileChooserDialogImpl/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1583788621297" />
-    <state width="1899" height="120" key="GridCell.Tab.0.bottom" timestamp="1584564222361">
+    <state width="1899" height="120" key="GridCell.Tab.0.bottom" timestamp="1584568706130">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="120" key="GridCell.Tab.0.bottom/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584564222361" />
-    <state width="1899" height="120" key="GridCell.Tab.0.center" timestamp="1584564222361">
+    <state width="1899" height="120" key="GridCell.Tab.0.bottom/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584568706130" />
+    <state width="1899" height="120" key="GridCell.Tab.0.center" timestamp="1584568706130">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="120" key="GridCell.Tab.0.center/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584564222361" />
-    <state width="1899" height="120" key="GridCell.Tab.0.left" timestamp="1584564222361">
+    <state width="1899" height="120" key="GridCell.Tab.0.center/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584568706130" />
+    <state width="1899" height="120" key="GridCell.Tab.0.left" timestamp="1584568706130">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="120" key="GridCell.Tab.0.left/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584564222361" />
-    <state width="1899" height="120" key="GridCell.Tab.0.right" timestamp="1584564222361">
+    <state width="1899" height="120" key="GridCell.Tab.0.left/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584568706130" />
+    <state width="1899" height="120" key="GridCell.Tab.0.right" timestamp="1584568706130">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1899" height="120" key="GridCell.Tab.0.right/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584564222361" />
+    <state width="1899" height="120" key="GridCell.Tab.0.right/-1360.304.1360.768/0.0.1920.1080@0.0.1920.1080" timestamp="1584568706130" />
     <state width="1899" height="189" key="GridCell.Tab.1.bottom" timestamp="1584136454435">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>

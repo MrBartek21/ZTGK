@@ -2,6 +2,7 @@ import ctypes
 import pygame
 import sys
 import json
+import socket
 
 
 # Check config file before init
@@ -238,6 +239,7 @@ class Game(object):
 
     # Load Game function
     def load_game(self):
+        # self.create_sockets()
         pass
 
     # Multiplayer function
@@ -271,6 +273,15 @@ class Game(object):
         self.draw_text("Screen resolution", (154, 27, 27), (self.x + 300) - self.x, 500, 48)
 
         self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
+
+    # Naprawić i zrobić
+    def create_sockets(self):
+        self.ip = "192.168.1.24"
+        self.port = 8888
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.bind((self.ip, self.port))
+        self.server_socket.listen(5)
+        self.conn, self.addr = self.server_socket.accept()
 
 
 if __name__ == "__main__":
