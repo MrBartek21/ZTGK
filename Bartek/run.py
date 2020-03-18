@@ -6,8 +6,7 @@ import sqlite3 as lite
 con = lite.connect('database.db')
 with con:
     cur = con.cursor()
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS save( id integer PRIMARY KEY, nick text NOT NULL, coin integer, world integer, lvl integer, eq integer);")
+    cur.execute("CREATE TABLE IF NOT EXISTS save( id integer PRIMARY KEY, nick text NOT NULL, coin integer, world integer, lvl integer, eq integer);")
     # cur.execute("SHOW TABLES;")
 
     # data = cur.fetchone()[0]
@@ -112,10 +111,13 @@ class Game(object):
             # Choice Menu
             if self.choice == 0:
                 self.draw_buttons("New game", (127, 27, 27), 36, self.x, 250, 300, 64, self.new_game)
-                self.draw_buttons("Settings", (127, 27, 27), 36, self.x, 325, 300, 64, self.settings)
-                self.draw_buttons("Exit", (127, 27, 27), 36, self.x, 400, 300, 64, self.quit_game)
+                self.draw_buttons("Load game", (127, 27, 27), 36, self.x, 325, 300, 64, self.load_game)
+                self.draw_buttons("Multiplayer", (127, 27, 27), 36, self.x, 400, 300, 64, self.multiplayer)
+                self.draw_buttons("Change character", (127, 27, 27), 36, self.x, 475, 300, 64, self.change_charakter)
+                self.draw_buttons("Settings", (127, 27, 27), 36, self.x, 550, 300, 64, self.settings)
+                self.draw_buttons("Exit", (127, 27, 27), 36, self.x, 625, 300, 64, self.quit_game)
             elif self.choice == 1:
-                self.draw_buttons("Music", (127, 27, 27), 36, 650, 300, 300, 64, self.back)
+                self.draw_buttons("Music", (127, 27, 27), 36, 650, 300, 300, 64, self.music)
                 self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, self.back)
         else:
             self.screen.blit(self.bg_l1_image, [0, 0])
@@ -134,7 +136,6 @@ class Game(object):
             if click[0] == 1 and action != None:
                 action()
         else:
-
             self.screen.blit(self.btn_image, [int(x / 2 - int(width / 2)), y])
             self.draw_text(text, text_color, int(x / 2), int(y + int(height / 2)), size)
 
