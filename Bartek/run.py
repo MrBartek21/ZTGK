@@ -1,22 +1,41 @@
 import ctypes
 import pygame, pygameMenu
 import sys
+import json
 import sqlite3 as lite
 
-con = lite.connect('database.db')
-with con:
-    cur = con.cursor()
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS save( id integer PRIMARY KEY, nick text NOT NULL, coin integer, world integer, lvl integer, eq integer);")
-    # cur.execute("SHOW TABLES;")
 
-    # data = cur.fetchone()[0]
-    # print("SQLite version: {}".format(data))
-    # fsdfsd
+def load_db(db, choice='con', volume=1.0):
+    con = lite.connect(db)
+    with con:
+        cur = con.cursor()
 
-"""
-    Nick coin World Lvl Eq 
-"""
+        if choice == 'init':
+            cur.execute("CREATE TABLE IF NOT EXISTS save(id integer PRIMARY KEY, nick text NOT NULL, coin integer, "
+                        "world integer, lvl integer, eq integer);")
+            cur.execute("CREATE TABLE IF NOT EXISTS settings(id integer PRIMARY KEY, music float);")
+            cur.execute("SELECT COUNT(*) FROM settings")
+
+            data = cur.fetchone()[0]
+            if data == 0:
+                cur.execute("INSERT INTO settings VALUES(1, " + str(volume) + ")")
+        elif choice == 'vol':
+            cur.execute("SELECT music FROM settings")
+            data = cur.fetchone()[0]
+            return data
+        elif choice == 'setvol':
+            cur.execute("UPDATE settings SET music = " + str(volume) + " WHERE id = 1")
+
+
+def load_json():
+    with open('config.txt', 'r') as file:
+        data = file.read().replace('\n', '')
+        data = json.loads(data)
+    return data
+
+
+x = load_json()
+print(x['menu2'])
 
 
 class Game(object):
@@ -34,10 +53,14 @@ class Game(object):
         self.box = pygame.Rect(0, 0, self.ScreenWidth2, self.ScreenHeight)
         self.DeveloperMode = True
         self.Title = "Bill's Adventrure"
+        self.db = 'database.db'
 
         # Initialization
         pygame.init()
         pygame.display.set_caption(self.Title)
+        load_db(self.db, 'init')
+        self.volume = load_db(self.db, 'vol')
+        print(self.volume)
 
         if self.DeveloperMode:
             self.screen = pygame.display.set_mode((1200, 800))
@@ -49,7 +72,8 @@ class Game(object):
 
         # Main Menu Music
         pygame.mixer.music.load('Framework/Music/Cinematic.mp3')
-        # pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(self.volume)
 
         # Icon Image
         gameIcon = pygame.image.load('Framework/Graphic/Icon.png')
@@ -104,6 +128,9 @@ class Game(object):
 
     # Main draw function
     def draw(self):
+        result = self.choice.split(":")
+        self.choice = result[0]
+
         # Choice Menu
         if self.choice == 'menu':
             self.main_menu()
@@ -121,8 +148,14 @@ class Game(object):
             sys.exit(0)
         elif self.choice == 'back':
             self.choice = 'menu'
+        elif self.choice == 'volume':
+            self.choice = 'settings'
+            self.volume = result[1]
+            self.volume = int(self.volume) / 100.0
+            pygame.mixer.music.set_volume(self.volume)
+            self.volume = load_db(self.db, 'setvol', self.volume)
 
-        self.draw_text("Preview version. Build 2e83c51", (27, 27, 27), (self.x + 100) - self.x, (self.y+10)-self.y,
+        self.draw_text("Preview version. Build 2e83c51", (27, 27, 27), (self.x + 100) - self.x, (self.y + 10) - self.y,
                        16)
 
     # Draw buttons function
@@ -186,12 +219,13 @@ class Game(object):
         # Draw text title
         self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
 
-        self.draw_text("Music", (127, 27, 27), (self.x+300)-self.x, 300, 36)
+        self.draw_text("Volume", (127, 27, 27), (self.x + 300) - self.x, 300, 40)
+        self.draw_buttons("0%", (127, 27, 27), 36, self.x, 268, 100, 64, 'volume:0')
+        self.draw_buttons("20%", (127, 27, 27), 36, self.x + 250, 268, 100, 64, 'volume:20')
+        self.draw_buttons("50%", (127, 27, 27), 36, self.x + 500, 268, 100, 64, 'volume:50')
+        self.draw_buttons("70%", (127, 27, 27), 36, self.x + 750, 268, 100, 64, 'volume:70')
+        self.draw_buttons("100%", (127, 27, 27), 36, self.x + 1000, 268, 100, 64, 'volume:100')
         self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
-
-    # Music function
-    def music(self):
-        pass
 
 
 if __name__ == "__main__":
