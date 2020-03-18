@@ -58,7 +58,6 @@ class Game(object):
 
         # Config
         self.choice = 'menu'
-        self.DeveloperMode = True
         self.Title = "Bill's Adventrure"
         self.config_file = 'config.txt'
         tps_clock = pygame.time.Clock()
@@ -75,6 +74,7 @@ class Game(object):
 
         # Screen size
         screen_json = self.json_data['screen']
+        fullscreen = screen_json['fullscreen']
         screensize = (screen_json['width'], screen_json['height'])
 
         # ----------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ class Game(object):
         pygame.init()
         pygame.display.set_caption(self.Title)
 
-        if self.DeveloperMode:
+        if fullscreen == 0:
             self.screen = pygame.display.set_mode((1200, 800))
         else:
             self.screen = pygame.display.set_mode(screensize, pygame.FULLSCREEN, 0, 32)
@@ -103,8 +103,9 @@ class Game(object):
         pygame.display.set_icon(gameIcon)
 
         # Buttons Image
-        self.btn_image = pygame.image.load("Framework/Graphic/tabliczka_2.png").convert_alpha()
-        self.btn_image2 = pygame.image.load("Framework/Graphic/tabliczka_3.png").convert_alpha()
+        self.btn_image = pygame.image.load("Framework/Graphic/sing.png").convert_alpha()
+        self.btn_image_active = pygame.image.load("Framework/Graphic/sing_active.png").convert_alpha()
+        self.btn_image_sm_active = pygame.image.load("Framework/Graphic/sing_active_sm.png").convert_alpha()
 
         # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
@@ -173,6 +174,12 @@ class Game(object):
             pygame.mixer.music.set_volume(volume_m)
             self.json_data['settings']['music'] = volume_m
             update_json(self.json_data, self.config_file)
+        elif self.choice == "fullscreen":
+            self.choice = 'settings'
+            data = result[1]
+            data = int(data)
+            self.json_data['screen']['fullscreen'] = data
+            update_json(self.json_data, self.config_file)
 
         self.draw_text("Preview version. Build 2e83c51", (27, 27, 27), (self.x + 100) - self.x, (self.y + 10) - self.y,
                        16)
@@ -183,15 +190,24 @@ class Game(object):
         click = pygame.mouse.get_pressed()
 
         self.btn_image = pygame.transform.scale(self.btn_image, (width, height))
-        self.btn_image2 = pygame.transform.scale(self.btn_image2, (width, height))
+        self.btn_image_active = pygame.transform.scale(self.btn_image_active, (width, height))
+
+        # self.btn_image_sm = pygame.transform.scale(self.btn_image_sm, (width, height))
+        self.btn_image_sm_active = pygame.transform.scale(self.btn_image_sm_active, (width, height))
 
         if int(x / 2 - int(width / 2)) + width > mouse[0] > int(x / 2 - int(width / 2)) and y + height > mouse[1] > y:
-            self.screen.blit(self.btn_image2, [int(x / 2 - int(width / 2)), y])
+            if width < 200:
+                self.screen.blit(self.btn_image_sm_active, [int(x / 2 - int(width / 2)), y])
+            else:
+                self.screen.blit(self.btn_image_active, [int(x / 2 - int(width / 2)), y])
             self.draw_text(text, text_color, int(x / 2), int(y + int(height / 2)), size)
             if click[0] == 1 and choice != None:
                 self.choice = choice
         else:
-            self.screen.blit(self.btn_image, [int(x / 2 - int(width / 2)), y])
+            if width < 200:
+                self.screen.blit(self.btn_image, [int(x / 2 - int(width / 2)), y])
+            else:
+                self.screen.blit(self.btn_image, [int(x / 2 - int(width / 2)), y])
             self.draw_text(text, text_color, int(x / 2), int(y + int(height / 2)), size)
 
     # Drawn text functions
@@ -238,12 +254,22 @@ class Game(object):
         # Draw text title
         self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
 
-        self.draw_text("Volume", (127, 27, 27), (self.x + 300) - self.x, 300, 40)
+        # Volume
+        self.draw_text("Volume", (154, 27, 27), (self.x + 300) - self.x, 300, 48)
         self.draw_buttons("0%", (127, 27, 27), 36, self.x, 268, 100, 64, 'volume:0')
         self.draw_buttons("20%", (127, 27, 27), 36, self.x + 250, 268, 100, 64, 'volume:20')
         self.draw_buttons("50%", (127, 27, 27), 36, self.x + 500, 268, 100, 64, 'volume:50')
         self.draw_buttons("70%", (127, 27, 27), 36, self.x + 750, 268, 100, 64, 'volume:70')
         self.draw_buttons("100%", (127, 27, 27), 36, self.x + 1000, 268, 100, 64, 'volume:100')
+
+        # Full screen
+        self.draw_text("Full Screen", (154, 27, 27), (self.x + 300) - self.x, 400, 48)
+        self.draw_buttons("Off", (127, 27, 27), 36, self.x + 375, 368, 100, 64, 'fullscreen:0')
+        self.draw_buttons("On", (127, 27, 27), 36, self.x + 625, 368, 100, 64, 'fullscreen:1')
+
+        # Screen resolution
+        self.draw_text("Screen resolution", (154, 27, 27), (self.x + 300) - self.x, 500, 48)
+
         self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
 
 
