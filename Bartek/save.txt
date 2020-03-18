@@ -1,0 +1,11 @@
+{
+  "count": 2,
+  "save1": {
+    "world": 1,
+    "enemy": 5
+  },
+  "save2": {
+    "world": 8,
+    "enemy": 15
+  }
+}
