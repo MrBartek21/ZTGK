@@ -61,6 +61,7 @@ class Game(object):
         self.choice = 'menu'
         self.Title = "Bill's Adventrure"
         self.config_file = 'config.txt'
+        self.save_file = 'save.json'
         tps_clock = pygame.time.Clock()
         tps_delta = 0.0
 
