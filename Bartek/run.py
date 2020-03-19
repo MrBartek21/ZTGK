@@ -243,15 +243,21 @@ class Game(object):
         data = load_json(self.save_file)
         print(data)
         count = data['count']
+        count = int(count)
 
         # Background and title
         self.screen.blit(self.background_image, [0, 0])
         # Draw text title
         self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
 
-        # Volume
-        self.draw_text("Load", (154, 27, 27), (self.x + 300) - self.x, 300, 48)
-        self.draw_text(str(count), (127, 27, 27), (self.x + 600) - self.x, 300, 48)
+        # Available game saves
+        self.draw_text("Available game saves", (154, 27, 27), (self.x + 500) - self.x, 200, 48)
+        self.draw_text(str(count) + "/4", (154, 27, 27), (self.x + 800) - self.x, 200, 48)
+
+        for x in count:
+            print(x)
+            # save = data['save'+str(x)]
+            # self.draw_text(str(save), (154, 27, 27), (self.x + 800) - self.x, 400*x, 48)
 
         self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
 
