@@ -240,8 +240,20 @@ class Game(object):
 
     # Load Game function
     def load_game(self):
-        # self.create_sockets()
-        pass
+        data = load_json(self.save_file)
+        print(data)
+        count = data['count']
+
+        # Background and title
+        self.screen.blit(self.background_image, [0, 0])
+        # Draw text title
+        self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
+
+        # Volume
+        self.draw_text("Load", (154, 27, 27), (self.x + 300) - self.x, 300, 48)
+        self.draw_text(str(count), (127, 27, 27), (self.x + 600) - self.x, 300, 48)
+
+        self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
 
     # Multiplayer function
     def multiplayer(self):
