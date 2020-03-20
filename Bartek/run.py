@@ -241,9 +241,7 @@ class Game(object):
     # Load Game function
     def load_game(self):
         data = load_json(self.save_file)
-        print(data)
         count = data['count']
-        count = int(count)
 
         # Background and title
         self.screen.blit(self.background_image, [0, 0])
@@ -251,13 +249,15 @@ class Game(object):
         self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
 
         # Available game saves
-        self.draw_text("Available game saves", (154, 27, 27), (self.x + 500) - self.x, 200, 48)
-        self.draw_text(str(count) + "/4", (154, 27, 27), (self.x + 800) - self.x, 200, 48)
+        self.draw_text("Available game saves: " + str(count) + "/4", (154, 27, 27), self.x / 2, 200, 48)
 
-        for x in count:
-            print(x)
-            # save = data['save'+str(x)]
-            # self.draw_text(str(save), (154, 27, 27), (self.x + 800) - self.x, 400*x, 48)
+        y = 250
+        for x in range(count):
+            x += 1
+            save = data['save' + str(x)]
+            world = save['world']
+            self.draw_buttons("World " + str(world), (154, 27, 27), 36, self.x, y + 40, 500, 80, 'new_game:save' + str(x))
+            y += 100
 
         self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
 
