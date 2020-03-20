@@ -263,7 +263,17 @@ class Game(object):
 
     # Multiplayer function
     def multiplayer(self):
-        pass
+        self.choice = 'menu'
+        HOST = '127.0.0.1'
+        PORT = 9879
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((HOST, PORT))
+            s.sendall(b'Test message')
+            data = s.recv(1024)
+
+        print('Received', repr(data))
+
 
     # CC function
     def change_character(self):
