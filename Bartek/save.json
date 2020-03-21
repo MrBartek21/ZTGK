@@ -1,11 +1,1 @@
-{
-  "count": 2,
-  "save1": {
-    "world": 1,
-    "enemy": 5
-  },
-  "save2": {
-    "world": 8,
-    "enemy": 15
-  }
-}
+{"count": 2, "player": 0, "save1": {"world": 1, "enemy": 5}, "save2": {"world": 6, "enemy": 12}, "save3": {"world": 0, "enemy": 0}, "save4": {"world": 0, "enemy": 0}}

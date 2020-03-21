@@ -6,7 +6,7 @@ import socket
 
 
 # Check config file before init
-def check_json(file_js):
+def check_json(file_js, data):
     try:
         with open(file_js) as f:
             print(f.readlines())
@@ -20,18 +20,41 @@ def check_json(file_js):
         ScreenWidth = user32.GetSystemMetrics(0)
         ScreenHeight = user32.GetSystemMetrics(1)
 
-        x = {
-            "settings": {
-                "volume": 1,
-                "music": 1,
-                "tps": 60
-            },
-            "screen": {
-                "width": ScreenWidth,
-                "height": ScreenHeight,
-                "fullscreen": 1
+        if data == "config":
+            x = {
+                "settings": {
+                    "volume": 1,
+                    "music": 1,
+                    "tps": 60
+                },
+                "screen": {
+                    "width": ScreenWidth,
+                    "height": ScreenHeight,
+                    "fullscreen": 1
+                }
             }
-        }
+        elif data == "save":
+            x = {
+                "count": 0,
+                "player": 0,
+                "save1": {
+                    "world": 0,
+                    "enemy": 0
+                },
+                "save2": {
+                    "world": 0,
+                    "enemy": 0
+                },
+                "save3": {
+                    "world": 0,
+                    "enemy": 0
+                },
+                "save4": {
+                    "world": 0,
+                    "enemy": 0
+                }
+            }
+
         f.write(json.dumps(x))
         f.close()
 
@@ -66,7 +89,8 @@ class Game(object):
         tps_delta = 0.0
 
         # Check settings
-        check_json(self.config_file)
+        check_json(self.config_file, 'config')
+        check_json(self.save_file, 'save')
         self.json_data = load_json(self.config_file)
 
         # Settings
@@ -78,6 +102,10 @@ class Game(object):
         screen_json = self.json_data['screen']
         fullscreen = screen_json['fullscreen']
         screensize = (screen_json['width'], screen_json['height'])
+
+        self.Color_gray = (27, 27, 27)
+        self.Color_dark_red = (127, 27, 27)
+        self.Color_dark_red2 = (154, 27, 27)
 
         # ----------------------------------------------------------------------------------------
         # ----------------------------------------------------------------------------------------
@@ -182,8 +210,24 @@ class Game(object):
             data = int(data)
             self.json_data['screen']['fullscreen'] = data
             update_json(self.json_data, self.config_file)
+        elif self.choice == "resolution":
+            self.choice = 'settings'
+            data = result[1]
+            if data == "hd":
+                ScreenWidth = 1280
+                ScreenHeight = 720
+            elif data == "hdp":
+                ScreenWidth = 1366
+                ScreenHeight = 768
+            elif data == "fhd":
+                ScreenWidth = 1920
+                ScreenHeight = 1080
 
-        self.draw_text("Preview version. Build 2e83c51", (27, 27, 27), (self.x + 100) - self.x, (self.y + 10) - self.y,
+            self.json_data['screen']['width'] = ScreenWidth
+            self.json_data['screen']['height'] = ScreenHeight
+            update_json(self.json_data, self.config_file)
+
+        self.draw_text("Preview version. Build 2e83c51", self.Color_gray, (self.x + 100) - self.x, (self.y + 10) - self.y,
                        16)
 
     # Draw buttons function
@@ -218,25 +262,25 @@ class Game(object):
         font = pygame.font.Font('Framework/Fonts/leadcoat.ttf', size)
         textobj = font.render(text, True, color)
         textrect = textobj.get_rect()
-        textrect.center = (x, y)
+        textrect.center = (int(x), int(y))
         self.screen.blit(textobj, textrect)
 
     def main_menu(self):
         # Background and title
         self.screen.blit(self.background_image, [0, 0])
         # Draw text title
-        self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
+        self.draw_text(self.Title, self.Color_dark_red, int(self.x / 2), 100, 96)
 
-        self.draw_buttons("New game", (127, 27, 27), 36, self.x, 250, 300, 64, 'new_game')  # 1
-        self.draw_buttons("Load game", (127, 27, 27), 36, self.x, 325, 300, 64, 'load_game')  # 2
-        self.draw_buttons("Multiplayer", (127, 27, 27), 36, self.x, 400, 300, 64, 'multiplayer')  # 3
-        self.draw_buttons("Change character", (127, 27, 27), 36, self.x, 475, 300, 64, 'change_character')  # 4
-        self.draw_buttons("Settings", (127, 27, 27), 36, self.x, 550, 300, 64, 'settings')  # 5
-        self.draw_buttons("Exit", (127, 27, 27), 36, self.x, 625, 300, 64, 'quit_game')  # 6
+        self.draw_buttons("New game", self.Color_dark_red, 36, self.x, 250, 300, 64, 'new_game')  # 1
+        self.draw_buttons("Load game", self.Color_dark_red, 36, self.x, 325, 300, 64, 'load_game')  # 2
+        self.draw_buttons("Multiplayer", self.Color_dark_red, 36, self.x, 400, 300, 64, 'multiplayer')  # 3
+        self.draw_buttons("Change character", self.Color_dark_red, 36, self.x, 475, 300, 64, 'change_character')  # 4
+        self.draw_buttons("Settings", self.Color_dark_red, 36, self.x, 550, 300, 64, 'settings')  # 5
+        self.draw_buttons("Exit", self.Color_dark_red, 36, self.x, 625, 300, 64, 'quit_game')  # 6
 
     def new_game(self):
         self.screen.blit(self.bg_l1_image, [0, 0])
-        self.draw_buttons("Exit", (127, 27, 27), 36, self.x, 625, 300, 64, 'quit_game')  # 6
+        self.draw_buttons("Exit", self.Color_dark_red, 36, self.x, 625, 300, 64, 'quit_game')  # 6
 
     # Load Game function
     def load_game(self):
@@ -246,7 +290,7 @@ class Game(object):
         # Background and title
         self.screen.blit(self.background_image, [0, 0])
         # Draw text title
-        self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
+        self.draw_text(self.Title, self.Color_dark_red, int(self.x / 2), 100, 96)
 
         # Available game saves
         self.draw_text("Available game saves: " + str(count) + "/4", (154, 27, 27), self.x / 2, 200, 48)
@@ -256,10 +300,11 @@ class Game(object):
             x += 1
             save = data['save' + str(x)]
             world = save['world']
-            self.draw_buttons("World " + str(world), (154, 27, 27), 36, self.x, y + 40, 500, 80, 'new_game:save' + str(x))
+            self.draw_buttons("World " + str(world), self.Color_dark_red2, 36, self.x, y + 40, 500, 80,
+                              'new_game:save' + str(x))
             y += 100
 
-        self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
+        self.draw_buttons("Back", self.Color_dark_red, 36, self.x, self.y - 100, 300, 64, 'back')
 
     # Multiplayer function
     def multiplayer(self):
@@ -274,34 +319,46 @@ class Game(object):
 
         print('Received', repr(data))
 
-
     # CC function
     def change_character(self):
-        pass
+        # Background and title
+        self.screen.blit(self.background_image, [0, 0])
+        # Draw text title
+        self.draw_text(self.Title, self.Color_dark_red, int(self.x / 2), 100, 96)
+
+        char1 = pygame.Rect(int(self.x / 2) - 450, 200, 300, 400)
+        char2 = pygame.Rect(int(self.x / 2) + 150, 200, 300, 400)
+        pygame.draw.rect(self.screen, self.Color_gray, char1)
+        pygame.draw.rect(self.screen, self.Color_gray, char2)
+
+        self.draw_buttons("Back", self.Color_dark_red, 36, self.x, self.y - 100, 300, 64, 'back')
 
     def settings(self):
         # Background and title
         self.screen.blit(self.background_image, [0, 0])
         # Draw text title
-        self.draw_text(self.Title, (127, 27, 27), int(self.x / 2), 100, 96)
+        self.draw_text(self.Title, self.Color_dark_red, int(self.x / 2), 100, 96)
 
         # Volume
-        self.draw_text("Volume", (154, 27, 27), (self.x + 300) - self.x, 300, 48)
-        self.draw_buttons("0%", (127, 27, 27), 36, self.x, 268, 100, 64, 'volume:0')
-        self.draw_buttons("20%", (127, 27, 27), 36, self.x + 250, 268, 100, 64, 'volume:20')
-        self.draw_buttons("50%", (127, 27, 27), 36, self.x + 500, 268, 100, 64, 'volume:50')
-        self.draw_buttons("70%", (127, 27, 27), 36, self.x + 750, 268, 100, 64, 'volume:70')
-        self.draw_buttons("100%", (127, 27, 27), 36, self.x + 1000, 268, 100, 64, 'volume:100')
+        self.draw_text("Volume", self.Color_dark_red2, (self.x + 300) - self.x, 300, 48)
+        self.draw_buttons("0%", self.Color_dark_red, 36, self.x, 268, 100, 64, 'volume:0')
+        self.draw_buttons("20%", self.Color_dark_red, 36, self.x + 250, 268, 100, 64, 'volume:20')
+        self.draw_buttons("50%", self.Color_dark_red, 36, self.x + 500, 268, 100, 64, 'volume:50')
+        self.draw_buttons("70%", self.Color_dark_red, 36, self.x + 750, 268, 100, 64, 'volume:70')
+        self.draw_buttons("100%", self.Color_dark_red, 36, self.x + 1000, 268, 100, 64, 'volume:100')
 
         # Full screen
-        self.draw_text("Full Screen", (154, 27, 27), (self.x + 300) - self.x, 400, 48)
-        self.draw_buttons("Off", (127, 27, 27), 36, self.x + 375, 368, 100, 64, 'fullscreen:0')
-        self.draw_buttons("On", (127, 27, 27), 36, self.x + 625, 368, 100, 64, 'fullscreen:1')
+        self.draw_text("Full Screen", self.Color_dark_red2, (self.x + 300) - self.x, 400, 48)
+        self.draw_buttons("Off", self.Color_dark_red, 36, self.x + 375, 368, 100, 64, 'fullscreen:0')
+        self.draw_buttons("On", self.Color_dark_red, 36, self.x + 625, 368, 100, 64, 'fullscreen:1')
 
         # Screen resolution
-        self.draw_text("Screen resolution", (154, 27, 27), (self.x + 300) - self.x, 500, 48)
+        self.draw_text("Screen resolution", self.Color_dark_red2, (self.x + 300) - self.x, 500, 48)
+        self.draw_buttons("HD", self.Color_dark_red, 36, self.x + 150, 468, 150, 64, 'resolution:hd')
+        self.draw_buttons("HD Plus", self.Color_dark_red, 36, self.x + 500, 468, 150, 64, 'resolution:hdp')
+        self.draw_buttons("Full HD", self.Color_dark_red, 36, self.x + 850, 468, 150, 64, 'resolution:fhd')
 
-        self.draw_buttons("Back", (127, 27, 27), 36, self.x, self.y - 100, 300, 64, 'back')
+        self.draw_buttons("Back", self.Color_dark_red, 36, self.x, self.y - 100, 300, 64, 'back')
 
     # Naprawić i zrobić
     def create_sockets(self):
