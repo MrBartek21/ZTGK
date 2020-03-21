@@ -3,6 +3,7 @@ import pygame
 import sys
 import json
 import socket
+import urllib.request
 
 
 # Check config file before init
@@ -72,6 +73,14 @@ def update_json(json_object, file_js):
     a_file = open(file_js, "w")
     json.dump(json_object, a_file)
     a_file.close()
+
+
+def internet_on():
+    code = urllib.request.urlopen("http://classicgames.sytes.net").getcode()
+    if code == 200:
+        return "Online"
+    else:
+        return "Offline"
 
 
 class Game(object):
@@ -227,8 +236,10 @@ class Game(object):
             self.json_data['screen']['height'] = ScreenHeight
             update_json(self.json_data, self.config_file)
 
-        self.draw_text("Preview version. Build 2e83c51", self.Color_gray, (self.x + 100) - self.x, (self.y + 10) - self.y,
-                       16)
+        self.draw_text("Preview version. Build 2e83c51", self.Color_gray, (self.x + 100) - self.x,
+                       (self.y + 10) - self.y, 16)
+        self.draw_text("Connected to server: " + internet_on(), self.Color_dark_red, (self.x + 120) - self.x,
+                       self.y - 20, 20)
 
     # Draw buttons function
     def draw_buttons(self, text, text_color, size, x, y, width, height, choice=None):
@@ -316,6 +327,7 @@ class Game(object):
             s.connect((HOST, PORT))
             s.sendall(b'Test message')
             data = s.recv(1024)
+            s.close()
 
         print('Received', repr(data))
 
