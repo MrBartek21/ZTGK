@@ -75,7 +75,7 @@ def update_json(json_object, file_js):
     a_file.close()
 
 
-def internet_on():
+def connected_server():
     code = urllib.request.urlopen("http://classicgames.sytes.net").getcode()
     if code == 200:
         return "Online"
@@ -92,10 +92,13 @@ class Game(object):
         # Config
         self.choice = 'menu'
         self.Title = "Bill's Adventrure"
-        self.config_file = 'config.txt'
+        self.config_file = 'config.json'
         self.save_file = 'save.json'
         tps_clock = pygame.time.Clock()
         tps_delta = 0.0
+
+        self.host = '127.0.0.1'
+        self.port = 9879
 
         # Check settings
         check_json(self.config_file, 'config')
@@ -149,7 +152,7 @@ class Game(object):
         # Background Image
         self.background_image = pygame.image.load("Framework/Graphic/background.png").convert()
         self.background_image = pygame.transform.scale(self.background_image, (self.x, self.y))
-        self.bg_l1_image = pygame.image.load("Framework/Graphic/plansza_1.png").convert()
+        self.bg_l1_image = pygame.image.load("Framework/Graphic/World/world_1.png").convert()
         self.bg_l1_image = pygame.transform.scale(self.bg_l1_image, (self.x, self.y))
 
         while True:
@@ -238,7 +241,7 @@ class Game(object):
 
         self.draw_text("Preview version. Build 2e83c51", self.Color_gray, (self.x + 100) - self.x,
                        (self.y + 10) - self.y, 16)
-        self.draw_text("Connected to server: " + internet_on(), self.Color_dark_red, (self.x + 120) - self.x,
+        self.draw_text("Connected to server: " + connected_server(), self.Color_dark_red, (self.x + 120) - self.x,
                        self.y - 20, 20)
 
     # Draw buttons function
@@ -304,7 +307,7 @@ class Game(object):
         self.draw_text(self.Title, self.Color_dark_red, int(self.x / 2), 100, 96)
 
         # Available game saves
-        self.draw_text("Available game saves: " + str(count) + "/4", (154, 27, 27), self.x / 2, 200, 48)
+        self.draw_text("Available game saves: " + str(count) + "/4", self.Color_dark_red, self.x / 2, 200, 48)
 
         y = 250
         for x in range(count):
@@ -319,17 +322,32 @@ class Game(object):
 
     # Multiplayer function
     def multiplayer(self):
-        self.choice = 'menu'
-        HOST = '127.0.0.1'
-        PORT = 9879
+        # Background and title
+        self.screen.blit(self.background_image, [0, 0])
+        # Draw text title
+        self.draw_text(self.Title, self.Color_dark_red, int(self.x / 2), 100, 96)
 
+        # Available game saves
+        self.draw_text("Available servers", self.Color_dark_red2, self.x / 2, 200, 48)
+
+        y = 250
+        for x in range(5):
+            self.draw_buttons("Server " + str(x), self.Color_dark_red2, 32, self.x, y + 40, 400, 64,
+                              'new_game:server' + str(x))
+            y += 80
+        self.draw_buttons("Back", self.Color_dark_red, 36, self.x, self.y - 100, 300, 64, 'back')
+
+        """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
-            s.sendall(b'Test message')
-            data = s.recv(1024)
-            s.close()
-
-        print('Received', repr(data))
+            try:
+                s.sendall(b'Test message')
+                data = s.recv(1024)
+                print('Received', repr(data))
+            finally:
+                print("Closing socket")
+                s.close()
+        """
 
     # CC function
     def change_character(self):
