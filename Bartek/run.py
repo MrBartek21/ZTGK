@@ -76,7 +76,7 @@ def update_json(json_object, file_js):
 
 
 def connected_server():
-    code = urllib.request.urlopen("http://classicgames.sytes.net").getcode()
+    code = urllib.request.urlopen("https://classicgames.sytes.net").getcode()
     if code == 200:
         return "Online"
     else:
